@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { Response } from './core/models/response.model';
+import { Response } from './shared/models/response.model';
 import { Product } from './product/models/product.model';
 
 @Component({
@@ -12,7 +13,7 @@ import { Product } from './product/models/product.model';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [CommonModule, RouterOutlet, SharedModule, HttpClientModule]
+    imports: [CommonModule, RouterOutlet, CoreModule, SharedModule, HttpClientModule]
 })
 export class AppComponent implements OnInit {
   _http = inject(HttpClient)

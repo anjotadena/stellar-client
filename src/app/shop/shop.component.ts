@@ -14,4 +14,6 @@ export class ShopComponent {
   private readonly _shopService = inject(ShopService);
 
   products = this._shopService.products;
+  brands = this._shopService.brands;
+  types = this._shopService.types;
 }

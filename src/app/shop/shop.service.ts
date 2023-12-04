@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { PaginatedResponse } from '../shared/models/paginated-response.model';
@@ -17,5 +17,7 @@ export class ShopService {
   private productsResult$ = this._http.get<PaginatedResponse<Product[]>>(ShopService.BASE_URL + "/products");
 
   // selectors
-  products = toSignal(this.productsResult$);
+  private productResult = toSignal(this.productsResult$);
+
+  products = computed(() => this.productResult()?.data);
 }

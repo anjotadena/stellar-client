@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShopComponent } from './shop.component';
+import { ProductItemComponent } from './components/product-item/product-item.component';
 
 
 
@@ -8,7 +9,8 @@ import { ShopComponent } from './shop.component';
   declarations: [],
   imports: [
     CommonModule,
-    ShopComponent
+    ShopComponent,
+    ProductItemComponent
   ],
   exports: [
     ShopComponent

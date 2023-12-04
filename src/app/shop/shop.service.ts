@@ -1,9 +1,21 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { PaginatedResponse } from '../shared/models/paginated-response.model';
+import { Product } from '../product/models/product.model';
+import { catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
+  static BASE_URL = "https://localhost:7136/api";
 
-  constructor() { }
+  private _http = inject(HttpClient);
+
+  private productsResult$ = this._http.get<PaginatedResponse<Product[]>>(ShopService.BASE_URL + "/products");
+
+  // selectors
+  products = toSignal(this.productsResult$);
 }

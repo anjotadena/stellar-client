@@ -5,18 +5,19 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ProductItemComponent } from './components/product-item/product-item.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { map } from 'rxjs';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'sc-shop',
   standalone: true,
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
-  imports: [CommonModule, RouterModule, ProductItemComponent],
+  imports: [CommonModule, RouterModule, NgbPaginationModule, ProductItemComponent],
 })
 export class ShopComponent {
-  private readonly _shopService = inject(ShopService);
-  private readonly _activatedRoute = inject(ActivatedRoute);
-  private readonly _router = inject(Router);
+  readonly _shopService = inject(ShopService);
+  readonly _activatedRoute = inject(ActivatedRoute);
+  readonly _router = inject(Router);
 
   products = this._shopService.products;
   brands = this._shopService.brands;
@@ -50,6 +51,14 @@ export class ShopComponent {
     this._router.navigate([], {
       relativeTo: this._activatedRoute,
       queryParams: { sort: (e.target as HTMLSelectElement).value },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  handlePageChange(e: number): void {
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: { pageIndex: e },
       queryParamsHandling: 'merge',
     });
   }

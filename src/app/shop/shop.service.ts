@@ -26,6 +26,7 @@ export class ShopService {
       const brandId = value.get('brandId');
       const typeId = value.get('typeId');
       const sort = value.get('sort');
+      const pageIndex = value.get('pageIndex');
 
       if (brandId) {
         params = params.append('brandId', brandId);
@@ -39,8 +40,12 @@ export class ShopService {
         params = params.append('sort', sort);
       }
 
+      if (pageIndex) {
+        params = params.append('pageIndex', pageIndex);
+      }
+
       return this._http.get<PaginatedResponse<Product[]>>(
-        ShopService.BASE_URL + '/products?pageSize=50',
+        ShopService.BASE_URL + '/products?pageSize=5',
         { params }
       );
     })
@@ -58,6 +63,9 @@ export class ShopService {
   private typesResult = toSignal(this.typesResult$);
 
   products = computed(() => this.productsResult()?.data);
+  productsPageSize = computed(() => this.productsResult()?.pageSize || 1);
+  productsCurrentPage = computed(() => this.productsResult()?.pageIndex || 1);
+  productsTotalCount = computed(() => this.productsResult()?.count || 0);
   brands = computed(() => this.brandsResult());
   types = computed(() => this.typesResult());
 }

@@ -8,41 +8,55 @@
         <option value="2">Price: High to Low</option>
       </select>
 
-      <h5 class="text-warning ms-3">
-        Brands
-      </h5>
+      <h5 class="text-warning ms-3">Brands</h5>
       <ul class="list-group my-3">
         @for (item of brands(); track $index) {
-          <li class="list-group-item">{{ item.name}}</li>
+        <a
+          [routerLink]="['.']"
+          [queryParams]="{ brandId: item.id }"
+          queryParamsHandling="merge"
+          class="list-group-item list-group-item-action active"
+          [ngClass]="{ active: brandIdSelected() === item.id }"
+        >
+          {{ item.name }}
+        </a>
         }
       </ul>
-      <h5 class="text-warning ms-3">
-        Types
-      </h5>
+      <h5 class="text-warning ms-3">Types</h5>
       <ul class="list-group my-3">
         @for (item of types(); track $index) {
-          <li class="list-group-item">{{ item.name}}</li>
+        <a
+          [routerLink]="['.']"
+          [queryParams]="{ typeId: item.id }"
+          queryParamsHandling="merge"
+          class="list-group-item list-group-item-action active"
+          [ngClass]="{ active: typeIdSelected() === item.id }"
+        >
+          {{ item.name }}
+        </a>
         }
       </ul>
     </section>
     <section class="col-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
         <header>
-          <span>Showing <strong>10</strong> of <strong>18</strong> Results</span>
+          <span
+            >Showing <strong>10</strong> of <strong>18</strong> Results</span
+          >
         </header>
         <div class="d-flex mt-2">
-          <input type="text" placeholder="Search" class="form-control me-2">
+          <input type="text" placeholder="Search" class="form-control me-2" />
           <button class="btn btn-outline-primary mx-2">Search</button>
           <button class="btn btn-outline-primary">Reset</button>
         </div>
       </div>
       <div class="row row-cols-3 g-3">
         @for (product of products(); track $index) {
-          <div class="col">
-            <sc-product-item [product]="product" />
-          </div>
+        <div class="col">
+          <sc-product-item [product]="product" />
+        </div>
         } @empty {
-          <h2>No Products.</h2>
+        <h2>No Products.</h2>
         }
       </div>
     </section>

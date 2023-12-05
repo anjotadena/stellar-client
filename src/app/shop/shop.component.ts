@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { ShopService } from './shop.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ProductItemComponent } from './components/product-item/product-item.component';
@@ -13,9 +20,17 @@ import { SharedModule } from '../shared/shared.module';
   standalone: true,
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
-  imports: [CommonModule, RouterModule, SharedModule, NgbPaginationModule, ProductItemComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SharedModule,
+    NgbPaginationModule,
+    ProductItemComponent,
+  ],
 })
 export class ShopComponent {
+  @ViewChild('search') searchTerm?: ElementRef;
+
   readonly _shopService = inject(ShopService);
   readonly _activatedRoute = inject(ActivatedRoute);
   readonly _router = inject(Router);
@@ -61,6 +76,24 @@ export class ShopComponent {
       relativeTo: this._activatedRoute,
       queryParams: { pageIndex: e },
       queryParamsHandling: 'merge',
+    });
+  }
+
+  handleSearch(): void {
+    const search = this.searchTerm?.nativeElement.value;
+
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: { search },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  handleReset(): void {
+    (this.searchTerm?.nativeElement as HTMLInputElement).value = "";
+
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
     });
   }
 }

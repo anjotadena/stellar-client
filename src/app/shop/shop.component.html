@@ -63,9 +63,9 @@
           [count]="_shopService.productsTotalCount()"
         />
         <div class="d-flex mt-2">
-          <input type="text" placeholder="Search" class="form-control me-2" />
-          <button class="btn btn-outline-primary mx-2">Search</button>
-          <button class="btn btn-outline-primary">Reset</button>
+          <input type="text" placeholder="Search" class="form-control me-2" #search (keyup.enter)="handleSearch()" />
+          <button class="btn btn-outline-primary mx-2" (click)="handleSearch()">Search</button>
+          <button class="btn btn-outline-success" (click)="handleReset()">Reset</button>
         </div>
       </div>
       <div class="row row-cols-3 g-3">

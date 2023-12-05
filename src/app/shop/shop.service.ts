@@ -27,6 +27,7 @@ export class ShopService {
       const typeId = value.get('typeId');
       const sort = value.get('sort');
       const pageIndex = value.get('pageIndex');
+      const search = value.get('search');
 
       if (brandId) {
         params = params.append('brandId', brandId);
@@ -42,6 +43,10 @@ export class ShopService {
 
       if (pageIndex) {
         params = params.append('pageIndex', pageIndex);
+      }
+
+      if (search) {
+        params = params.append('search', search);
       }
 
       return this._http.get<PaginatedResponse<Product[]>>(

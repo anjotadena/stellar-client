@@ -2,10 +2,10 @@
   <div class="row">
     <section class="col-3">
       <h5 class="text-warning ms-3">Sort</h5>
-      <select name="" id="" class="form-select mb-4">
-        <option>Alphabetical</option>
-        <option value="1">Price: Low to High</option>
-        <option value="2">Price: High to Low</option>
+      <select class="form-select mb-4" (change)="handleChangeSort($event)">
+        @for (sort of sortOptions; track $index) {
+        <option [value]="sort.value">{{ sort.name }}</option>
+        }
       </select>
 
       <h5 class="text-warning ms-3">Brands</h5>

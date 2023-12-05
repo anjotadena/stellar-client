@@ -1,13 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject, computed } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, shareReplay, switchMap } from 'rxjs';
 
 import { PaginatedResponse } from '../shared/models/paginated-response.model';
 import { Product } from '../product/models/product.model';
-import { catchError, shareReplay, switchMap } from 'rxjs';
 import { Brand } from '../shared/models/brand.model';
 import { Type } from '../shared/models/type.model';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,7 @@ export class ShopService {
       let params = new HttpParams();
       const brandId = value.get('brandId');
       const typeId = value.get('typeId');
+      const sort = value.get('sort');
 
       if (brandId) {
         params = params.append('brandId', brandId);
@@ -32,6 +33,10 @@ export class ShopService {
 
       if (typeId) {
         params = params.append('typeId', typeId);
+      }
+
+      if (sort) {
+        params = params.append('sort', sort);
       }
 
       return this._http.get<PaginatedResponse<Product[]>>(

@@ -10,10 +10,10 @@ import { Type } from '../shared/models/type.model';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShopService {
-  static BASE_URL = "https://localhost:7136/api";
+  static BASE_URL = 'https://localhost:7136/api';
 
   private _http = inject(HttpClient);
   private _activatedRoute = inject(ActivatedRoute);
@@ -21,24 +21,31 @@ export class ShopService {
   // Products
   private productsResult$ = this._activatedRoute.queryParamMap.pipe(
     shareReplay(),
-    switchMap(value => {
+    switchMap((value) => {
       let params = new HttpParams();
-      const brandId = value.get("brandId");
-      const typeId = value.get("typeId");
+      const brandId = value.get('brandId');
+      const typeId = value.get('typeId');
 
       if (brandId) {
-        params = params.append("brandId", brandId);
+        params = params.append('brandId', brandId);
       }
 
       if (typeId) {
-        params = params.append("typeId", typeId);
+        params = params.append('typeId', typeId);
       }
-      console.log("gfg", value);
-      return this._http.get<PaginatedResponse<Product[]>>(ShopService.BASE_URL + "/products?pageSize=50", { params })
+
+      return this._http.get<PaginatedResponse<Product[]>>(
+        ShopService.BASE_URL + '/products?pageSize=50',
+        { params }
+      );
     })
-  ) ;
-  private brandsResult$ = this._http.get<Brand[]>(ShopService.BASE_URL + "/products/brands");
-  private typesResult$ = this._http.get<Type[]>(ShopService.BASE_URL + "/products/types");
+  );
+  private brandsResult$ = this._http.get<Brand[]>(
+    ShopService.BASE_URL + '/products/brands'
+  );
+  private typesResult$ = this._http.get<Type[]>(
+    ShopService.BASE_URL + '/products/types'
+  );
 
   // selectors
   private productsResult = toSignal(this.productsResult$);

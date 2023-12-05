@@ -10,13 +10,22 @@
 
       <h5 class="text-warning ms-3">Brands</h5>
       <ul class="list-group my-3">
+        <a
+          [routerLink]="['.']"
+          [queryParams]="{ brandId: null }"
+          queryParamsHandling="merge"
+          class="list-group-item list-group-item-action"
+          [class.active]="!brandIdSelected()"
+        >
+          All Brands
+        </a>
         @for (item of brands(); track $index) {
         <a
           [routerLink]="['.']"
           [queryParams]="{ brandId: item.id }"
           queryParamsHandling="merge"
-          class="list-group-item list-group-item-action active"
-          [ngClass]="{ active: brandIdSelected() === item.id }"
+          class="list-group-item list-group-item-action"
+          [class.active]="brandIdSelected() === item.id"
         >
           {{ item.name }}
         </a>
@@ -24,13 +33,22 @@
       </ul>
       <h5 class="text-warning ms-3">Types</h5>
       <ul class="list-group my-3">
+        <a
+          [routerLink]="['.']"
+          [queryParams]="{ typeId: null }"
+          queryParamsHandling="merge"
+          class="list-group-item list-group-item-action"
+          [class.active]="!typeIdSelected()"
+        >
+          All Types
+        </a>
         @for (item of types(); track $index) {
         <a
           [routerLink]="['.']"
           [queryParams]="{ typeId: item.id }"
           queryParamsHandling="merge"
-          class="list-group-item list-group-item-action active"
-          [ngClass]="{ active: typeIdSelected() === item.id }"
+          class="list-group-item list-group-item-action"
+          [class.active]="typeIdSelected() === item.id"
         >
           {{ item.name }}
         </a>

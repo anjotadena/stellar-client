@@ -6,13 +6,14 @@ import { ProductItemComponent } from './components/product-item/product-item.com
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { map } from 'rxjs';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'sc-shop',
   standalone: true,
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
-  imports: [CommonModule, RouterModule, NgbPaginationModule, ProductItemComponent],
+  imports: [CommonModule, RouterModule, SharedModule, NgbPaginationModule, ProductItemComponent],
 })
 export class ShopComponent {
   readonly _shopService = inject(ShopService);

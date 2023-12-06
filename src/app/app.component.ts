@@ -4,7 +4,6 @@ import { RouterOutlet } from '@angular/router';
 
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { HomeModule } from './home/home.module';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +14,7 @@ import { HomeModule } from './home/home.module';
     CommonModule,
     RouterOutlet,
     CoreModule,
+    SharedModule,
   ]
 })
 export class AppComponent {

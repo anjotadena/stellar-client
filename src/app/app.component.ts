@@ -17,7 +17,7 @@ import { HomeModule } from './home/home.module';
     CoreModule,
     SharedModule,
     HomeModule,
-  ],
+  ]
 })
 export class AppComponent {
   title = 'Stellar';

@@ -1,13 +1,21 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject, computed } from '@angular/core';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, shareReplay, switchMap } from 'rxjs';
+import { Injectable, inject, computed, signal } from '@angular/core';
+import {
+  toSignal,
+  takeUntilDestroyed,
+  toObservable,
+} from '@angular/core/rxjs-interop';
+import { filter, of, shareReplay, switchMap, tap } from 'rxjs';
 
 import { PaginatedResponse } from '../shared/models/paginated-response.model';
 import { Product } from '../product/models/product.model';
 import { Brand } from '../shared/models/brand.model';
 import { Type } from '../shared/models/type.model';
-import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  ParamMap,
+} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +25,8 @@ export class ShopService {
 
   private _http = inject(HttpClient);
   private _activatedRoute = inject(ActivatedRoute);
+
+  selectedProductId = signal<number | undefined>(undefined);
 
   // Products
   private productsResult$ = this._activatedRoute.queryParamMap.pipe(
@@ -55,6 +65,12 @@ export class ShopService {
       );
     })
   );
+  private productDetailResult$ = toObservable(this.selectedProductId).pipe(
+    filter(Boolean),
+    switchMap((id) =>
+      this._http.get<Product>(ShopService.BASE_URL + '/products/' + id)
+    )
+  );
   private brandsResult$ = this._http.get<Brand[]>(
     ShopService.BASE_URL + '/products/brands'
   );
@@ -64,13 +80,19 @@ export class ShopService {
 
   // selectors
   private productsResult = toSignal(this.productsResult$);
+  private productDetailResult = toSignal(this.productDetailResult$);
   private brandsResult = toSignal(this.brandsResult$);
   private typesResult = toSignal(this.typesResult$);
 
   products = computed(() => this.productsResult()?.data);
+  product = computed(() => this.productDetailResult());
   productsPageSize = computed(() => this.productsResult()?.pageSize || 1);
   productsCurrentPage = computed(() => this.productsResult()?.pageIndex || 1);
   productsTotalCount = computed(() => this.productsResult()?.count || 0);
   brands = computed(() => this.brandsResult());
   types = computed(() => this.typesResult());
+
+  setSelectedProduct(id: number): void {
+    this.selectedProductId.set(id);
+  }
 }

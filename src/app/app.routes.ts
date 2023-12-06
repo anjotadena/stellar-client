@@ -10,11 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'shop',
-    component: ShopComponent,
-  },
-  {
-    path: 'shop/:id',
-    component: ProductDetailsComponent,
+    loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule),
   },
   {
     path: '**',

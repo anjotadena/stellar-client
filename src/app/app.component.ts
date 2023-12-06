@@ -17,7 +17,6 @@ import { HomeModule } from './home/home.module';
     RouterOutlet,
     CoreModule,
     SharedModule,
-    ShopModule,
     HomeModule,
   ],
 })

@@ -4,7 +4,6 @@ import { RouterOutlet } from '@angular/router';
 
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { ShopModule } from './shop/shop.module';
 import { HomeModule } from './home/home.module';
 
 @Component({

@@ -27,6 +27,7 @@ import { SharedModule } from '../shared/shared.module';
     NgbPaginationModule,
     ProductItemComponent,
   ],
+  providers: [ShopService]
 })
 export class ShopComponent {
   @ViewChild('search') searchTerm?: ElementRef;

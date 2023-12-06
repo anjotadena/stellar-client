@@ -1,18 +1,29 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, tap, throwError } from 'rxjs';
+import { NavigationExtras, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, throwError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       const router = inject(Router);
+      const toastrService = inject(ToastrService);
 
       if (error) {
-        if (error.status === 404) {
+        if (error.status === 400) {
+          throw error.error;
+        } else {
+          toastrService.error(error.error.message, error.status.toString());
+        }
+        if (error.status === 401) {
+          toastrService.error(error.error.message, error.status.toString());
+        } else if (error.status === 404) {
           router.navigateByUrl("/not-found");
         } else if (error.status === 500) {
-          router.navigateByUrl("/server-error");
+          const navigationExtras: NavigationExtras = { state: { error: error.error }};
+
+          router.navigateByUrl("/server-error", navigationExtras);
         }
       }
 

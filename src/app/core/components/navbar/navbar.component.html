@@ -1,15 +1,24 @@
 <header
   class="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3 mb-4 border-bottom"
 >
-  <img src="/assets/images/logo.png" alt="logo" style="max-height: 70px" />
+  <img
+    src="/assets/images/logo.png"
+    alt="logo"
+    class="logo"
+    [routerLink]="['/']"
+  />
   <nav class="my-2 text-uppercase fs-6">
-    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#"
+    <a
+      class="me-3 py-2"
+      [routerLink]="['/']"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
       >Home</a
     >
-    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#"
+    <a class="me-3 py-2" [routerLink]="['/shop']" routerLinkActive="active"
       >Shop</a
     >
-    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#"
+    <a class="me-3 py-2" [routerLink]="['/contact']" routerLinkActive="active"
       >Contact</a
     >
   </nav>

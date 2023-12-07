@@ -11,6 +11,10 @@ export const routes: Routes = [
     loadChildren: () => import('./shop/shop.routes').then(m => m.routes),
   },
   {
+    path: 'cart',
+    loadChildren: () => import('./cart/cart.routes').then(m => m.routes),
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',

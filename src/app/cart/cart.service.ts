@@ -20,7 +20,7 @@ export class CartService {
 
   private cartTotalSource = new BehaviorSubject<CartTotal | null>(null);
 
-  cartTotalSource$ = this.cartSource.asObservable();
+  cartTotalSource$ = this.cartTotalSource.asObservable();
 
   constructor(private readonly _http: HttpClient) {}
 
@@ -48,13 +48,53 @@ export class CartService {
     return this.cartSource.value;
   }
 
-  addItemToCart(item: Product, quantity = 1) {
-    const itemToAdd = this.mapProductItem(item);
+  addItemToCart(item: Product | CartItem, quantity = 1) {
+    if (this.isProduct(item)) {
+      item = this.mapProductItem(item);
+    }
+
     const cart = this.getCurrentCartValue() ?? this.createCart();
 
-    cart.items = this.addOrUpdateItem(cart.items, itemToAdd, quantity);
+    cart.items = this.addOrUpdateItem(cart.items, item, quantity);
 
     this.setCart(cart);
+  }
+
+  removeItemFromCart(id: number, quantity = 1) {
+    const cart = this.getCurrentCartValue();
+
+    if (!cart) {
+      return;
+    }
+
+    const item = cart.items.find(i => i.id === id);
+
+    if (item) {
+      item.quantity -= quantity;
+
+      if (item.quantity === 0) {
+        cart.items = cart.items.filter(i => i.id !== id);
+      }
+
+      if (cart.items.length > 0) {
+        this.setCart(cart);
+      } else {
+        this.deleteCart(cart);
+      }
+    }
+
+    return item;
+  }
+
+  private deleteCart(cart: Cart) {
+    return this._http.delete(this.baseUrl + "/basket?id=" + cart.id).subscribe({
+      next: () => {
+        this.cartSource.next(null);
+        this.cartTotalSource.next(null);
+
+        localStorage.removeItem("stellar:cart_id");
+      }
+    })
   }
 
   private mapProductItem(item: Product): CartItem {
@@ -109,5 +149,9 @@ export class CartService {
     );
     const total = shipping + subtotal;
     this.cartTotalSource.next({ shipping, subtotal, total });
+  }
+
+  private isProduct(item: Product | CartItem): item is Product {
+    return (item as Product).productBrand !== undefined;
   }
 }

@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { Component, Input } from '@angular/core';
 import { CartService } from './cart.service';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,7 @@ import { CartItem } from '../shared/models/cart-item.model';
 @Component({
   selector: 'sc-cart',
   standalone: true,
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, RouterModule, SharedModule],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })

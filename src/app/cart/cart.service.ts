@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { Cart } from '../shared/cart';
 import { Product } from '../product/models/product.model';
 import { CartItem } from '../shared/models/cart-item.model';
+import { CartTotal } from '../shared/models/cart-total.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,17 +18,29 @@ export class CartService {
 
   cartSource$ = this.cartSource.asObservable();
 
+  private cartTotalSource = new BehaviorSubject<CartTotal | null>(null);
+
+  cartTotalSource$ = this.cartSource.asObservable();
+
   constructor(private readonly _http: HttpClient) {}
 
   getCart(id: string) {
     return this._http.get<Cart>(this.baseUrl + '/basket?id=' + id).subscribe({
-      next: (cart) => this.cartSource.next(cart),
+      next: (cart) => {
+        this.cartSource.next(cart);
+
+        this.calculateTotals();
+      },
     });
   }
 
   setCart(cart: Cart) {
     return this._http.post<Cart>(this.baseUrl + '/basket', cart).subscribe({
-      next: (cart) => this.cartSource.next(cart),
+      next: (cart) => {
+        this.cartSource.next(cart);
+
+        this.calculateTotals();
+      },
     });
   }
 
@@ -52,7 +65,7 @@ export class CartService {
       pictureUrl: item.pictureUrl,
       productName: item.name,
       id: item.id,
-      price: item.price
+      price: item.price,
     };
   }
 
@@ -64,8 +77,12 @@ export class CartService {
     return cart;
   }
 
-  private addOrUpdateItem(items: CartItem[], itemToAdd: CartItem, quantity: number): CartItem[] {
-    const item = items.find(x => x.id === itemToAdd.id);
+  private addOrUpdateItem(
+    items: CartItem[],
+    itemToAdd: CartItem,
+    quantity: number
+  ): CartItem[] {
+    const item = items.find((x) => x.id === itemToAdd.id);
 
     if (item) {
       item.quantity += quantity;
@@ -76,5 +93,21 @@ export class CartService {
     }
 
     return items;
+  }
+
+  private calculateTotals() {
+    const cart = this.getCurrentCartValue();
+
+    if (!cart) {
+      return;
+    }
+
+    const shipping = 0;
+    const subtotal = cart.items.reduce(
+      (total, item) => item.price * item.quantity + total,
+      0
+    );
+    const total = shipping + subtotal;
+    this.cartTotalSource.next({ shipping, subtotal, total });
   }
 }

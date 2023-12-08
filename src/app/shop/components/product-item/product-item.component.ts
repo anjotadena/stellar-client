@@ -17,7 +17,6 @@ export class ProductItemComponent {
   constructor(private readonly _cartService: CartService) {}
 
   addItemToCart(): void {
-    console.log("ADD ITEM TO CART!");
     if (this.product) {
       this._cartService.addItemToCart(this.product);
     }

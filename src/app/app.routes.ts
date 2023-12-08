@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadChildren: () => import('./cart/cart.routes').then(m => m.routes),
   },
   {
+    path: 'checkout',
+    loadChildren: () => import('./checkout/checkout.routes').then(m => m.routes),
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',

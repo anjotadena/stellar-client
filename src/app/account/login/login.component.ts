@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { AccountService } from '../account.service';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'sc-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SharedModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

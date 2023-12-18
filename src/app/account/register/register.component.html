@@ -1,1 +1,17 @@
-<p>register works!</p>
+<div class="d-flex justify-content-center align-items-center mt-5">
+  <div class="col-3">
+    <form [formGroup]="form" (submit)="handleSubmitSignUp()">
+      <div class="mb-4">
+        <h1 class="mb-4">Register</h1>
+        <sc-text-input [formControl]="$any(form.get('displayName'))" label="Display Name" name="displayName" />
+        <sc-text-input [formControl]="$any(form.get('email'))" label="Email Address" name="email" />
+        <sc-text-input [formControl]="$any(form.get('password'))" type="password" label="Password" name="password" />
+        <div class="d-grid">
+          <button class="btn btn-lg btn-primary mt-3" type="submit">
+            Login
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

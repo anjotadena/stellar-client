@@ -9,7 +9,7 @@ import {
 import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { map } from 'rxjs';
+import { debounceTime, delay, map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'sc-register',
@@ -24,7 +24,11 @@ export class RegisterComponent {
 
   form = this._fb.group({
     displayName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email], [this.validateEmailNotTaken()]],
+    email: [
+      '',
+      [Validators.required, Validators.email],
+      [this.validateEmailNotTaken()],
+    ],
     password: [
       '',
       [Validators.required, Validators.pattern(this.passwordRegEx)],
@@ -45,8 +49,14 @@ export class RegisterComponent {
 
   validateEmailNotTaken(): AsyncValidatorFn {
     return (control: AbstractControl) =>
-      this._accountService
-        .checkEmailExists(control.value)
-        .pipe(map((x) => (x ? { emailExists: true } : null)));
+      control.valueChanges.pipe(
+        debounceTime(1000),
+        take(1),
+        switchMap(() =>
+          this._accountService.checkEmailExists(control.value).pipe(
+            map((x) => (x ? { emailExists: true } : null))
+          )
+        )
+      );
   }
 }

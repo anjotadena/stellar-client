@@ -7,6 +7,9 @@
     [name]="name"
     [ngClass]="control.touched ? (control.invalid ? 'is-invalid' : 'is-valid') : null"
   />
+  @if (control.status === 'PENDING') {
+    <div class="fa fa-spinner fa-spin loader"></div>
+  }
   <label for="floatingInput">{{ label }}</label>
   @if (control.errors?.['required']) {
   <div class="invalid-feedback">Please enter your {{ label }}</div>

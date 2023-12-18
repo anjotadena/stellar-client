@@ -1,8 +1,15 @@
 import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'sc-register',
@@ -17,7 +24,7 @@ export class RegisterComponent {
 
   form = this._fb.group({
     displayName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email], [this.validateEmailNotTaken()]],
     password: [
       '',
       [Validators.required, Validators.pattern(this.passwordRegEx)],
@@ -34,5 +41,12 @@ export class RegisterComponent {
     this._accountService
       .register(this.form.value)
       .subscribe((x) => this._router.navigateByUrl('/shop'));
+  }
+
+  validateEmailNotTaken(): AsyncValidatorFn {
+    return (control: AbstractControl) =>
+      this._accountService
+        .checkEmailExists(control.value)
+        .pipe(map((x) => (x ? { emailExists: true } : null)));
   }
 }

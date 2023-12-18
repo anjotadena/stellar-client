@@ -15,4 +15,12 @@
   @if (control.errors?.['email']) {
   <div class="invalid-feedback">Invalid email address</div>
   }
+
+  @if (control.errors?.['pattern']) {
+  <div class="invalid-feedback">Invalid format</div>
+  }
+
+  @if (control.errors?.['emailExists']) {
+  <div class="invalid-feedback">Email already exists</div>
+  }
 </div>

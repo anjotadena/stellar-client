@@ -6,6 +6,11 @@ export const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
+  // Accounts module
+  {
+    path: '',
+    loadChildren: () => import('./account/account.routes').then(m => m.routes),
+  },
   {
     path: 'shop',
     loadChildren: () => import('./shop/shop.routes').then(m => m.routes),

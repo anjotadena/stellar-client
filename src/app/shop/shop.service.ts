@@ -1,21 +1,13 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject, computed, signal } from '@angular/core';
-import {
-  toSignal,
-  takeUntilDestroyed,
-  toObservable,
-} from '@angular/core/rxjs-interop';
-import { filter, of, shareReplay, switchMap, tap } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { filter, shareReplay, switchMap } from 'rxjs';
 
-import { PaginatedResponse } from '../shared/models/paginated-response.model';
 import { Product } from '../product/models/product.model';
 import { Brand } from '../shared/models/brand.model';
+import { PaginatedResponse } from '../shared/models/paginated-response.model';
 import { Type } from '../shared/models/type.model';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ParamMap,
-} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -59,17 +51,23 @@ export class ShopService {
         params = params.append('search', search);
       }
 
+      const headers = this._getHeaders();
+
       return this._http.get<PaginatedResponse<Product[]>>(
         ShopService.BASE_URL + '/products?pageSize=5',
-        { params }
+        { params, headers }
       );
     })
   );
   private productDetailResult$ = toObservable(this.selectedProductId).pipe(
     filter(Boolean),
-    switchMap((id) =>
-      this._http.get<Product>(ShopService.BASE_URL + '/products/' + id)
-    )
+    switchMap((id) => {
+      const headers = this._getHeaders();
+
+      return this._http.get<Product>(ShopService.BASE_URL + '/products/' + id, {
+        headers,
+      });
+    })
   );
   private brandsResult$ = this._http.get<Brand[]>(
     ShopService.BASE_URL + '/products/brands'
@@ -94,5 +92,16 @@ export class ShopService {
 
   setSelectedProduct(id: number): void {
     this.selectedProductId.set(id);
+  }
+
+  private _getHeaders(): HttpHeaders {
+    let headers = new HttpHeaders();
+
+    headers = headers.set(
+      'Authorization',
+      `Bearer ${localStorage.getItem('token')}`
+    );
+
+    return headers;
   }
 }

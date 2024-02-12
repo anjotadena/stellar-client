@@ -6,7 +6,7 @@
         <sc-text-input [formControl]="$any(loginForm.get('email'))" label="Email Address" name="email" />
         <sc-text-input [formControl]="$any(loginForm.get('password'))" type="password" label="Password" name="password" />
         <div class="d-grid">
-          <button class="btn btn-lg btn-primary mt-3" type="submit">
+          <button [disabled]="isLoggingIn()" class="btn btn-lg btn-primary mt-3" type="submit">
             Login
           </button>
         </div>

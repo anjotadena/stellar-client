@@ -29,7 +29,11 @@
       <span class="cart-no">{{ getCount(cart.items) }}</span>
       }
     </a>
-    <a routerLink="/login" class="btn btn-outline-secondary me-2">Login</a>
-    <a routerLink="/register" class="btn btn-outline-secondary me-2">Sign Up</a>
+    @if (!currentUser()) {
+      <a routerLink="/login" class="btn btn-outline-secondary me-2">Login</a>
+      <a routerLink="/register" class="btn btn-outline-secondary me-2">Sign Up</a>
+    } @else {
+      <button (click)="logout()" class="btn btn-outline-secondary me-2">Logout</button>
+    }
   </div>
 </header>

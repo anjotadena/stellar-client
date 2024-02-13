@@ -1,16 +1,15 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
-  withInterceptors,
-  withInterceptorsFromDi,
+  withInterceptors
 } from '@angular/common/http';
+import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
+import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { provideToastr } from 'ngx-toastr';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -23,7 +22,7 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     provideHttpClient(
-      withInterceptors([errorInterceptor, loadingInterceptor])
+      withInterceptors([errorInterceptor, loadingInterceptor, jwtInterceptor])
     ),
   ],
 };

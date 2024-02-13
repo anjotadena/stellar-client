@@ -7,6 +7,7 @@ import { OrderTotalsComponent } from './ui/order-totals/order-totals.component';
 import { TextInputComponent } from './ui/text-input/text-input.component';
 import { StepperComponent } from './ui/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 
 @NgModule({
   declarations: [],
@@ -17,6 +18,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     OrderTotalsComponent,
     TextInputComponent,
     StepperComponent,
+    BasketSummaryComponent,
   ],
   exports: [
     PaginationHeaderComponent,
@@ -25,6 +27,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     TextInputComponent,
     StepperComponent,
     CdkStepperModule,
+    BasketSummaryComponent,
   ],
 })
 export class SharedModule {}

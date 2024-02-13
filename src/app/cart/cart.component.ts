@@ -19,8 +19,7 @@ export class CartComponent {
     this._cartService.addItemToCart(item);
   }
 
-  removeQuantity(id: number, quantity = 1) {
-    this._cartService.removeItemFromCart(id, quantity);
+  removeQuantity(event: { id: number, quantity: number }) {
+    this._cartService.removeItemFromCart(event.id, event.quantity);
   }
-
 }

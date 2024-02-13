@@ -1,3 +1,23 @@
 <div class="container mt-5">
-  <h1>Only authorized users should be able to proceed checkout!</h1>
+  <div class="row">
+    <div class="col-8">
+      <sc-stepper [linearModeSelected]="false" #scStepper>
+        <cdk-step [label]="'Address'">
+          Address step
+        </cdk-step>
+        <cdk-step [label]="'Delivery'">
+          Delivery step
+        </cdk-step>
+        <cdk-step [label]="'Review'">
+          Review step
+        </cdk-step>
+        <cdk-step [label]="'Payment'">
+          Payment step
+        </cdk-step>
+      </sc-stepper>
+    </div>
+    <div class="col-4">
+      <sc-order-totals></sc-order-totals>
+    </div>
+  </div>
 </div>

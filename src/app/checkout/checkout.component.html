@@ -3,16 +3,16 @@
     <div class="col-8">
       <sc-stepper [linearModeSelected]="false" #scStepper>
         <cdk-step [label]="'Address'">
-          Address step
+          <sc-checkout-address [checkoutForm]="checkoutForm" />
         </cdk-step>
         <cdk-step [label]="'Delivery'">
-          Delivery step
+          <sc-checkout-delivery />
         </cdk-step>
         <cdk-step [label]="'Review'">
-          Review step
+          <sc-checkout-review />
         </cdk-step>
         <cdk-step [label]="'Payment'">
-          Payment step
+          <sc-checkout-payment />
         </cdk-step>
       </sc-stepper>
     </div>

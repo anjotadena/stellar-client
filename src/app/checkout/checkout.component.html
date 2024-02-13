@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-8">
       <sc-stepper [linearModeSelected]="false" #scStepper>
-        <cdk-step [label]="'Address'">
+        <cdk-step [label]="'Address'" [completed]="checkoutForm.get('addressForm')?.valid">
           <sc-checkout-address [checkoutForm]="checkoutForm" />
         </cdk-step>
-        <cdk-step [label]="'Delivery'">
+        <cdk-step [label]="'Delivery'" [completed]="checkoutForm.get('deliveryForm')?.valid">
           <sc-checkout-delivery [checkoutForm]="checkoutForm" />
         </cdk-step>
-        <cdk-step [label]="'Review'">
+        <cdk-step [label]="'Review'" [completed]="checkoutForm.get('reviewForm')?.valid">
           <sc-checkout-review />
         </cdk-step>
         <cdk-step [label]="'Payment'">

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/user.model';
+import { Address } from '../shared/models/address.model';
 
 @Injectable({
   providedIn: 'root',
@@ -71,5 +72,13 @@ export class AccountService {
     return this._http.get<boolean>(
       this.baseUrl + '/account/emailExists?email=' + email
     );
+  }
+
+  getUserAddress() {
+    return this._http.get<Address>(this.baseUrl + '/account/address');
+  }
+
+  updateUserAddress(address: Address) {
+    return this._http.put(this.baseUrl + '/account/address', address);
   }
 }

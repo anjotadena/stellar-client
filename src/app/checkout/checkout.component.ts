@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { SharedModule } from '../shared/shared.module';
@@ -8,6 +8,7 @@ import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery
 import { CheckoutPaymentComponent } from './checkout-payment/checkout-payment.component';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { CheckoutSuccessComponent } from './checkout-success/checkout-success.component';
+import { AccountService } from '../account/account.service';
 
 @Component({
   selector: 'sc-checkout',
@@ -24,7 +25,7 @@ import { CheckoutSuccessComponent } from './checkout-success/checkout-success.co
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   checkoutForm = this._fb.group({
     addressForm: this._fb.group({
       firstName: ['', Validators.required],
@@ -45,5 +46,17 @@ export class CheckoutComponent {
     }),
   });
 
-  constructor(private readonly _fb: FormBuilder) {}
+  constructor(private readonly _fb: FormBuilder, private readonly _accountService: AccountService) {}
+
+  ngOnInit(): void {
+    this.getAddressFormValues();
+  }
+
+  getAddressFormValues() {
+    this._accountService.getUserAddress().subscribe({
+      next: address => {
+        address && this.checkoutForm.get("addressForm")?.patchValue(address as any);
+      }
+    });
+  }
 }

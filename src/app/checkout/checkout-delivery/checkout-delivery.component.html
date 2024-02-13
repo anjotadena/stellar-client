@@ -1,1 +1,24 @@
-<p>checkout-delivery works!</p>
+@if (checkoutForm) {
+<div class="mt-4" [formGroup]="checkoutForm">
+  <div class="row" formGroupName="deliveryForm">
+    @if (deliveryMethods$ | async; as deliveryMethods) {
+      @for (method of deliveryMethods; track $index) {
+        <div class="col-6 form-group">
+          <input
+            type="radio"
+            class="form-check-input"
+            formControlName="deliveryMethod"
+            [value]="method.id"
+            [checked]="
+              method.id === checkoutForm.get('deliveryForm.deliveryMethod')?.value
+            "
+          />
+          <label for="{{ method.id }}" class="form-check-label ms-2 mb-3">
+            <strong>{{ method.shortName }} - {{ method.description }}</strong>
+          </label>
+        </div>
+      }
+    }
+  </div>
+</div>
+}

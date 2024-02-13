@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject, map, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment.development';
 import { User } from '../shared/models/user.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -27,10 +27,7 @@ export class AccountService {
       return of(null);
     }
 
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
-
-    return this._http.get<User>(this.baseUrl + '/account', { headers }).pipe(
+    return this._http.get<User>(this.baseUrl + '/account').pipe(
       map((user) => {
         if (!user) {
           return null;
@@ -71,6 +68,8 @@ export class AccountService {
   }
 
   checkEmailExists(email: string) {
-    return this._http.get<boolean>(this.baseUrl + '/account/emailExists?email=' + email);
+    return this._http.get<boolean>(
+      this.baseUrl + '/account/emailExists?email=' + email
+    );
   }
 }

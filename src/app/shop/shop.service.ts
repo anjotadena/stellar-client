@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -51,23 +51,15 @@ export class ShopService {
         params = params.append('search', search);
       }
 
-      const headers = this._getHeaders();
-
       return this._http.get<PaginatedResponse<Product[]>>(
         ShopService.BASE_URL + '/products?pageSize=5',
-        { params, headers }
+        { params }
       );
     })
   );
   private productDetailResult$ = toObservable(this.selectedProductId).pipe(
     filter(Boolean),
-    switchMap((id) => {
-      const headers = this._getHeaders();
-
-      return this._http.get<Product>(ShopService.BASE_URL + '/products/' + id, {
-        headers,
-      });
-    })
+    switchMap((id) => this._http.get<Product>(ShopService.BASE_URL + '/products/' + id))
   );
   private brandsResult$ = this._http.get<Brand[]>(
     ShopService.BASE_URL + '/products/brands'
@@ -92,16 +84,5 @@ export class ShopService {
 
   setSelectedProduct(id: number): void {
     this.selectedProductId.set(id);
-  }
-
-  private _getHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-
-    headers = headers.set(
-      'Authorization',
-      `Bearer ${localStorage.getItem('token')}`
-    );
-
-    return headers;
   }
 }

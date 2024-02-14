@@ -12,6 +12,7 @@
             [checked]="
               method.id === checkoutForm.get('deliveryForm.deliveryMethod')?.value
             "
+            (click)="setShippingPrice(method)"
           />
           <label for="{{ method.id }}" class="form-check-label ms-2 mb-3">
             <strong>{{ method.shortName }} - {{ method.description }}</strong>

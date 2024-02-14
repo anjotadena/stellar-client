@@ -7,6 +7,7 @@ import { Cart } from '../shared/cart';
 import { Product } from '../product/models/product.model';
 import { CartItem } from '../shared/models/cart-item.model';
 import { CartTotal } from '../shared/models/cart-total.model';
+import { DeliveryMethod } from '../shared/models/delivery-method';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,15 @@ export class CartService {
 
   cartTotalSource$ = this.cartTotalSource.asObservable();
 
+  shipping = 0;
+
   constructor(private readonly _http: HttpClient) {}
+
+  setShippingPrice(deliveryMethod: DeliveryMethod) {
+    this.shipping = deliveryMethod.price;
+
+    this.calculateTotals();
+  }
 
   getCart(id: string) {
     return this._http.get<Cart>(this.baseUrl + '/basket?id=' + id).subscribe({
@@ -142,13 +151,12 @@ export class CartService {
       return;
     }
 
-    const shipping = 0;
     const subtotal = cart.items.reduce(
       (total, item) => item.price * item.quantity + total,
       0
     );
-    const total = shipping + subtotal;
-    this.cartTotalSource.next({ shipping, subtotal, total });
+    const total = this.shipping + subtotal;
+    this.cartTotalSource.next({ shipping: this.shipping, subtotal, total });
   }
 
   private isProduct(item: Product | CartItem): item is Product {

@@ -4,6 +4,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CheckoutService } from '../checkout.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CartService } from '../../cart/cart.service';
+import { DeliveryMethod } from '../../shared/models/delivery-method';
 
 @Component({
   selector: 'sc-checkout-delivery',
@@ -17,5 +19,9 @@ export class CheckoutDeliveryComponent {
 
   deliveryMethods$ = this._checkoutService.getDeliveryMethods();
 
-  constructor(private readonly _checkoutService: CheckoutService) {}
+  constructor(private readonly _checkoutService: CheckoutService, private readonly _cartService: CartService) {}
+
+  setShippingPrice(deliveryMethod: DeliveryMethod) {
+    this._cartService.setShippingPrice(deliveryMethod);
+  }
 }

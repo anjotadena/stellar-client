@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 
-import { CoreModule } from './core/core.module';
-import { SharedModule } from './shared/shared.module';
-import { CartService } from './cart/cart.service';
-import { AccountService } from './account/account.service';
+import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
+import { CartService } from '@cart/cart.service';
+import { AccountService } from '@account/account.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCartItems();
-    this.loadCurrentUser()
+    this.loadCurrentUser();
   }
 
   private loadCartItems() {

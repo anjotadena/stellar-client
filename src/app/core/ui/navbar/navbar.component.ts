@@ -1,11 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
-import { CartService } from '../../../cart/cart.service';
-import { CartItem } from '../../../shared/models/cart-item.model';
-import { AccountService } from '../../../account/account.service';
+import { AccountService } from '@account/account.service';
+import { CartService } from '@cart/cart.service';
+import { CartItem } from '@shared/models/cart-item.model';
 
 @Component({
   selector: 'sc-navbar',

@@ -7,10 +7,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 
+import { errorInterceptor } from '@app/core/interceptors/error.interceptor';
+import { jwtInterceptor } from '@core/interceptors/jwt.interceptor';
+import { loadingInterceptor } from '@core/interceptors/loading.interceptor';
+
 import { routes } from './app.routes';
-import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

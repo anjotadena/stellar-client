@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { AccountService } from '../../account/account.service';
 import { ToastrService } from 'ngx-toastr';
+
+import { AccountService } from '@account/account.service';
+import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'sc-checkout-address',
@@ -27,7 +28,9 @@ export class CheckoutAddressComponent {
       .subscribe({
         next: () => {
           this._toastr.success('Address Saved!');
-          this.checkoutForm?.get("addressForm")?.reset(this.checkoutForm?.get('addressForm')?.value);
+          this.checkoutForm
+            ?.get('addressForm')
+            ?.reset(this.checkoutForm?.get('addressForm')?.value);
         },
       });
   }

@@ -12,7 +12,7 @@
           <sc-checkout-review />
         </cdk-step>
         <cdk-step [label]="'Payment'">
-          <sc-checkout-payment />
+          <sc-checkout-payment [checkoutForm]="checkoutForm" />
         </cdk-step>
       </sc-stepper>
     </div>

@@ -6,10 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
-import { debounceTime, delay, map, switchMap, take } from 'rxjs';
+import { debounceTime, map, switchMap, take } from 'rxjs';
+
+import { SharedModule } from '@shared/shared.module';
+
+import { AccountService } from '../account.service';
 
 @Component({
   selector: 'sc-register',
@@ -53,9 +55,9 @@ export class RegisterComponent {
         debounceTime(1000),
         take(1),
         switchMap(() =>
-          this._accountService.checkEmailExists(control.value).pipe(
-            map((x) => (x ? { emailExists: true } : null))
-          )
+          this._accountService
+            .checkEmailExists(control.value)
+            .pipe(map((x) => (x ? { emailExists: true } : null)))
         )
       );
   }

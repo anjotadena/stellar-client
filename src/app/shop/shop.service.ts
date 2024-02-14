@@ -4,10 +4,10 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { filter, shareReplay, switchMap } from 'rxjs';
 
-import { Product } from '../product/models/product.model';
-import { Brand } from '../shared/models/brand.model';
-import { PaginatedResponse } from '../shared/models/paginated-response.model';
-import { Type } from '../shared/models/type.model';
+import { Product } from '@product/models/product.model';
+import { Brand } from '@shared/models/brand.model';
+import { PaginatedResponse } from '@shared/models/paginated-response.model';
+import { Type } from '@shared/models/type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +59,9 @@ export class ShopService {
   );
   private productDetailResult$ = toObservable(this.selectedProductId).pipe(
     filter(Boolean),
-    switchMap((id) => this._http.get<Product>(ShopService.BASE_URL + '/products/' + id))
+    switchMap((id) =>
+      this._http.get<Product>(ShopService.BASE_URL + '/products/' + id)
+    )
   );
   private brandsResult$ = this._http.get<Brand[]>(
     ShopService.BASE_URL + '/products/brands'

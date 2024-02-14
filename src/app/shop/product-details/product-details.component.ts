@@ -1,10 +1,12 @@
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Component, OnInit, inject } from '@angular/core';
-import { ShopService } from '../shop.service';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../cart/cart.service';
+import { Component, OnInit, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
+
+import { CartService } from '@cart/cart.service';
+
+import { ShopService } from '../shop.service';
 
 @Component({
   selector: 'sc-product-details',

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
+
+import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'sc-checkout-review',

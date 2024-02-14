@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ReplaySubject, map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { ReplaySubject, map, of } from 'rxjs';
 
-import { environment } from '../../environments/environment.development';
-import { User } from '../shared/models/user.model';
-import { Address } from '../shared/models/address.model';
+import { environment } from '@env/environment.development';
+import { Address } from '@shared/models/address.model';
+import { User } from '@shared/models/user.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
-import { CartService } from '../../cart/cart.service';
-import { ToastrService } from 'ngx-toastr';
-import { CheckoutService } from '../checkout.service';
-import { Cart } from '../../shared/cart';
 import { NavigationExtras, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
+import { CartService } from '@cart/cart.service';
+import { Cart } from '@shared/cart';
+import { SharedModule } from '@shared/shared.module';
+
+import { CheckoutService } from '../checkout.service';
 
 @Component({
   selector: 'sc-checkout-payment',
@@ -22,7 +24,7 @@ export class CheckoutPaymentComponent {
     private readonly _cartService: CartService,
     private readonly _checkoutService: CheckoutService,
     private readonly _toastrService: ToastrService,
-    private readonly _router: Router,
+    private readonly _router: Router
   ) {}
 
   submitOrder() {

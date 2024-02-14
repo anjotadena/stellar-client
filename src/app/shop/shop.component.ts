@@ -1,19 +1,14 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
-import { ShopService } from './shop.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ProductItemComponent } from './components/product-item/product-item.component';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { map } from 'rxjs';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from '../shared/shared.module';
+
+import { SharedModule } from '@shared/shared.module';
+
+import { ProductItemComponent } from './components/product-item/product-item.component';
+import { ShopService } from './shop.service';
 
 @Component({
   selector: 'sc-shop',
@@ -27,7 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     NgbPaginationModule,
     ProductItemComponent,
   ],
-  providers: [ShopService]
+  providers: [ShopService],
 })
 export class ShopComponent {
   @ViewChild('search') searchTerm?: ElementRef;
@@ -91,7 +86,7 @@ export class ShopComponent {
   }
 
   handleReset(): void {
-    (this.searchTerm?.nativeElement as HTMLInputElement).value = "";
+    (this.searchTerm?.nativeElement as HTMLInputElement).value = '';
 
     this._router.navigate([], {
       relativeTo: this._activatedRoute,

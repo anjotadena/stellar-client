@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { environment } from '../../environments/environment.development';
-import { Cart } from '../shared/cart';
-import { Product } from '../product/models/product.model';
-import { CartItem } from '../shared/models/cart-item.model';
-import { CartTotal } from '../shared/models/cart-total.model';
-import { DeliveryMethod } from '../shared/models/delivery-method';
+import { environment } from '@env/environment.development';
+import { Product } from '@product/models/product.model';
+import { Cart } from '@shared/cart';
+import { CartItem } from '@shared/models/cart-item.model';
+import { CartTotal } from '@shared/models/cart-total.model';
+import { DeliveryMethod } from '@shared/models/delivery-method';
 
 @Injectable({
   providedIn: 'root',
@@ -76,13 +76,13 @@ export class CartService {
       return;
     }
 
-    const item = cart.items.find(i => i.id === id);
+    const item = cart.items.find((i) => i.id === id);
 
     if (item) {
       item.quantity -= quantity;
 
       if (item.quantity === 0) {
-        cart.items = cart.items.filter(i => i.id !== id);
+        cart.items = cart.items.filter((i) => i.id !== id);
       }
 
       if (cart.items.length > 0) {
@@ -96,16 +96,16 @@ export class CartService {
   }
 
   private deleteCart(cart: Cart) {
-    return this._http.delete(this.baseUrl + "/basket?id=" + cart.id).subscribe({
-      next: () => this.deleteLocalCart()
-    })
+    return this._http.delete(this.baseUrl + '/basket?id=' + cart.id).subscribe({
+      next: () => this.deleteLocalCart(),
+    });
   }
 
   deleteLocalCart() {
     this.cartSource.next(null);
     this.cartTotalSource.next(null);
 
-    localStorage.removeItem("stellar:cart_id");
+    localStorage.removeItem('stellar:cart_id');
   }
 
   private mapProductItem(item: Product): CartItem {

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CartService } from '../../../cart/cart.service';
-import { Product } from '../../../product/models/product.model';
+
+import { CartService } from '@cart/cart.service';
+import { Product } from '@product/models/product.model';
 
 @Component({
   selector: 'sc-product-item',

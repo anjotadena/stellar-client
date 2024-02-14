@@ -1,15 +1,17 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AccountService } from '../account.service';
-import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
+
+import { SharedModule } from '@shared/shared.module';
+
+import { AccountService } from '../account.service';
 
 @Component({
   selector: 'sc-login',
@@ -22,7 +24,10 @@ export class LoginComponent {
   isLoggingIn = signal(false);
 
   loginForm = this._fb.group({
-    email: new FormControl('bob@test.com', [Validators.required, Validators.email]),
+    email: new FormControl('bob@test.com', [
+      Validators.required,
+      Validators.email,
+    ]),
     password: new FormControl('Pa$$w0rd', [
       Validators.required,
       Validators.minLength(8),
@@ -37,7 +42,7 @@ export class LoginComponent {
     private readonly _fb: FormBuilder,
     private readonly _accountService: AccountService,
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _router: Router,
+    private readonly _router: Router
   ) {
     this.returnUrl =
       this._activatedRoute.snapshot.queryParamMap?.get('returnUrl') || '/shop';
@@ -52,6 +57,6 @@ export class LoginComponent {
         takeUntilDestroyed(this._destroyRef),
         tap(() => this.isLoggingIn.set(false))
       )
-      .subscribe((_) => this._router.navigate(["/shop"]));
+      .subscribe((_) => this._router.navigate(['/shop']));
   }
 }

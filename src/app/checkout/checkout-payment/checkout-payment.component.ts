@@ -6,6 +6,7 @@ import { CartService } from '../../cart/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { CheckoutService } from '../checkout.service';
 import { Cart } from '../../shared/cart';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'sc-checkout-payment',
@@ -20,7 +21,8 @@ export class CheckoutPaymentComponent {
   constructor(
     private readonly _cartService: CartService,
     private readonly _checkoutService: CheckoutService,
-    private readonly _toastrService: ToastrService
+    private readonly _toastrService: ToastrService,
+    private readonly _router: Router,
   ) {}
 
   submitOrder() {
@@ -38,8 +40,13 @@ export class CheckoutPaymentComponent {
 
     this._checkoutService.createOrder(orderToCreate).subscribe({
       next: (order) => {
-        this._toastrService.success('Order created successfully');
         console.log(order);
+        this._toastrService.success('Order created successfully');
+        this._cartService.deleteLocalCart();
+
+        const navigationExtras: NavigationExtras = { state: order };
+
+        this._router.navigate(['checkout/success'], navigationExtras);
       },
       error: (error) => {
         this._toastrService.error(error);

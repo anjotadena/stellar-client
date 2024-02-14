@@ -97,13 +97,15 @@ export class CartService {
 
   private deleteCart(cart: Cart) {
     return this._http.delete(this.baseUrl + "/basket?id=" + cart.id).subscribe({
-      next: () => {
-        this.cartSource.next(null);
-        this.cartTotalSource.next(null);
-
-        localStorage.removeItem("stellar:cart_id");
-      }
+      next: () => this.deleteLocalCart()
     })
+  }
+
+  deleteLocalCart() {
+    this.cartSource.next(null);
+    this.cartTotalSource.next(null);
+
+    localStorage.removeItem("stellar:cart_id");
   }
 
   private mapProductItem(item: Product): CartItem {

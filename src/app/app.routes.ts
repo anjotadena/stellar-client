@@ -27,6 +27,11 @@ export const routes: Routes = [
     loadChildren: () => import('./checkout/checkout.routes').then(m => m.routes),
   },
   {
+    path: 'orders',
+    canActivate: [authGuard],
+    loadChildren: () => import('./order/order.routes').then(m => m.routes),
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',

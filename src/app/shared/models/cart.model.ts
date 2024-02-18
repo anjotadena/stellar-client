@@ -6,4 +6,5 @@ export interface Cart {
   clientSecret?: string;
   paymentIntentId?: string;
   deliveryMethodId?: number;
+  shippingPrice: number;
 }

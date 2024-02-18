@@ -9,4 +9,5 @@ export class Cart implements ICart {
   deliveryMethodId?: number;
   clientSecret?: string;
   paymentIntentId?: string;
+  shippingPrice = 0;
 }

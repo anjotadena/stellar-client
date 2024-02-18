@@ -8,10 +8,7 @@
             type="radio"
             class="form-check-input"
             formControlName="deliveryMethod"
-            [value]="method.id"
-            [checked]="
-              method.id === checkoutForm.get('deliveryForm.deliveryMethod')?.value
-            "
+            [value]="method.id.toString()"
             (click)="setShippingPrice(method)"
           />
           <label for="{{ method.id }}" class="form-check-label ms-2 mb-3">

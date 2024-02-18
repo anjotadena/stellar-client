@@ -23,8 +23,6 @@ export class CartService {
 
   cartTotalSource$ = this.cartTotalSource.asObservable();
 
-  shipping = 0;
-
   constructor(private readonly _http: HttpClient) {}
 
   createPaymentIntent() {
@@ -38,9 +36,9 @@ export class CartService {
 
   setShippingPrice(deliveryMethod: DeliveryMethod) {
     const basket = this.getCurrentCartValue();
-    this.shipping = deliveryMethod.price;
 
     if (basket) {
+      basket.shippingPrice = deliveryMethod.price;
       basket.deliveryMethodId = deliveryMethod.id;
 
       this.setCart(basket);
@@ -171,8 +169,8 @@ export class CartService {
       (total, item) => item.price * item.quantity + total,
       0
     );
-    const total = this.shipping + subtotal;
-    this.cartTotalSource.next({ shipping: this.shipping, subtotal, total });
+    const total = cart.shippingPrice + subtotal;
+    this.cartTotalSource.next({ shipping: cart.shippingPrice, subtotal, total });
   }
 
   private isProduct(item: Product | CartItem): item is Product {

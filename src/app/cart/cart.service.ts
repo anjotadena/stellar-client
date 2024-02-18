@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 import { environment } from '@env/environment.development';
 import { Product } from '@product/models/product.model';
@@ -27,12 +27,21 @@ export class CartService {
 
   constructor(private readonly _http: HttpClient) {}
 
+  createPaymentIntent() {
+    return this._http
+      .post<Cart>(
+        this.baseUrl + '/payments/' + this.getCurrentCartValue()?.id,
+        {}
+      )
+      .pipe(map((cart) => this.cartSource.next(cart)));
+  }
+
   setShippingPrice(deliveryMethod: DeliveryMethod) {
     const basket = this.getCurrentCartValue();
     this.shipping = deliveryMethod.price;
 
     if (basket) {
-      basket.deliveryMethod = deliveryMethod.id;
+      basket.deliveryMethodId = deliveryMethod.id;
 
       this.setCart(basket);
     }

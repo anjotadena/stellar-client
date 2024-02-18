@@ -6,4 +6,7 @@ import { Cart as ICart } from './models/cart.model';
 export class Cart implements ICart {
   id = cuid();
   items: CartItem[] = [];
+  deliveryMethod?: number;
+  clientSecret?: string;
+  paymentIntentId?: string;
 }

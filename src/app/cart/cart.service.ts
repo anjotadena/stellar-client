@@ -28,9 +28,14 @@ export class CartService {
   constructor(private readonly _http: HttpClient) {}
 
   setShippingPrice(deliveryMethod: DeliveryMethod) {
+    const basket = this.getCurrentCartValue();
     this.shipping = deliveryMethod.price;
 
-    this.calculateTotals();
+    if (basket) {
+      basket.deliveryMethod = deliveryMethod.id;
+
+      this.setCart(basket);
+    }
   }
 
   getCart(id: string) {

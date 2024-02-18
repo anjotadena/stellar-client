@@ -10,6 +10,7 @@ import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery
 import { CheckoutPaymentComponent } from './checkout-payment/checkout-payment.component';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { CheckoutSuccessComponent } from './checkout-success/checkout-success.component';
+import { CartService } from '@app/cart/cart.service';
 
 @Component({
   selector: 'sc-checkout',
@@ -47,10 +48,11 @@ export class CheckoutComponent implements OnInit {
     }),
   });
 
-  constructor(private readonly _fb: FormBuilder, private readonly _accountService: AccountService) {}
+  constructor(private readonly _fb: FormBuilder, private readonly _accountService: AccountService, private readonly _cartService: CartService) {}
 
   ngOnInit(): void {
     this.getAddressFormValues();
+    this.getDeliveryMethodValue();
   }
 
   getAddressFormValues() {
@@ -59,5 +61,13 @@ export class CheckoutComponent implements OnInit {
         address && this.checkoutForm.get("addressForm")?.patchValue(address as any);
       }
     });
+  }
+
+  getDeliveryMethodValue() {
+    const basket = this._cartService.getCurrentCartValue();
+
+    if (basket && basket.deliveryMethod) {
+      this.checkoutForm.get("deliveryForm")?.get("deliveryMethod")?.patchValue(basket.deliveryMethod.toString());
+    }
   }
 }

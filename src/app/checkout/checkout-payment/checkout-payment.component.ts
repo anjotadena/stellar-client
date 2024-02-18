@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +9,7 @@ import { Cart } from '@shared/cart';
 import { SharedModule } from '@shared/shared.module';
 
 import { CheckoutService } from '../checkout.service';
+import { Stripe, StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, loadStripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'sc-checkout-payment',
@@ -17,8 +18,17 @@ import { CheckoutService } from '../checkout.service';
   templateUrl: './checkout-payment.component.html',
   styleUrl: './checkout-payment.component.scss',
 })
-export class CheckoutPaymentComponent {
+export class CheckoutPaymentComponent implements OnInit {
+  @ViewChild('cardNumber') cardNumberElement?: ElementRef;
+  @ViewChild('cardExpiry') cardExpiryElement?: ElementRef;
+  @ViewChild('cardCvc') cardCvcElement?: ElementRef;
+
   @Input() checkoutForm?: FormGroup;
+
+  stripe: Stripe | null = null;
+  cardNumber?: StripeCardNumberElement;
+  cardExpiry?: StripeCardExpiryElement;
+  cardCvc?: StripeCardCvcElement;
 
   constructor(
     private readonly _cartService: CartService,
@@ -26,6 +36,26 @@ export class CheckoutPaymentComponent {
     private readonly _toastrService: ToastrService,
     private readonly _router: Router
   ) {}
+
+  ngOnInit(): void {
+    loadStripe('pk_test_51KfxOmGLD3kMElxsCct2QuQUasU1iM6IBqVOTPyyLbhxeWwaA6VVUdgWrrZnqlB3H9HxdQaTsaczNRw7f8Lhtyog005QXd19uy')
+      .then(stripe => {
+        this.stripe = stripe;
+
+        const elements = stripe?.elements();
+
+        if (elements) {
+          this.cardNumber = elements.create('cardNumber');
+          this.cardNumber.mount(this.cardNumberElement?.nativeElement);
+
+          this.cardExpiry = elements.create('cardExpiry');
+          this.cardExpiry.mount(this.cardExpiryElement?.nativeElement);
+
+          this.cardCvc = elements.create('cardCvc');
+          this.cardCvc.mount(this.cardCvcElement?.nativeElement);
+        }
+      })
+  }
 
   submitOrder() {
     const basket = this._cartService.getCurrentCartValue();

@@ -1,5 +1,6 @@
+import { CdkStepper } from '@angular/cdk/stepper';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CartService } from '@app/cart/cart.service';
 
 import { SharedModule } from '@shared/shared.module';
@@ -13,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './checkout-review.component.scss',
 })
 export class CheckoutReviewComponent {
+  @Input() appStepper?: CdkStepper;
+
   constructor(
     private readonly _cartService: CartService,
     private readonly _toastrService: ToastrService
@@ -20,7 +23,10 @@ export class CheckoutReviewComponent {
 
   createPaymentIntent() {
     this._cartService.createPaymentIntent().subscribe({
-      next: () => this._toastrService.success('Payment intent created!'),
+      next: () => {
+        this._toastrService.success('Payment intent created!');
+        this.appStepper?.next();
+      },
       error: (error) => this._toastrService.error(error?.message),
     });
   }

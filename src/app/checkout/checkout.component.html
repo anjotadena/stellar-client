@@ -9,7 +9,7 @@
           <sc-checkout-delivery [checkoutForm]="checkoutForm" />
         </cdk-step>
         <cdk-step [label]="'Review'" [completed]="checkoutForm.get('reviewForm')?.valid">
-          <sc-checkout-review />
+          <sc-checkout-review [appStepper]="scStepper"/>
         </cdk-step>
         <cdk-step [label]="'Payment'">
           <sc-checkout-payment [checkoutForm]="checkoutForm" />

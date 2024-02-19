@@ -16,6 +16,9 @@ import {
   StripeCardNumberElement,
   loadStripe,
 } from '@stripe/stripe-js';
+import { environment } from '@env/environment.development';
+import { firstValueFrom } from 'rxjs';
+import { OrderToCreate } from '@app/shared/models/order';
 
 @Component({
   selector: 'sc-checkout-payment',
@@ -36,6 +39,7 @@ export class CheckoutPaymentComponent implements OnInit {
   cardExpiry?: StripeCardExpiryElement;
   cardCvc?: StripeCardCvcElement;
   cardErrors?: any;
+  loading = false;
 
   constructor(
     private readonly _cartService: CartService,
@@ -45,9 +49,7 @@ export class CheckoutPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    loadStripe(
-      'pk_test_51KfxOmGLD3kMElxsCct2QuQUasU1iM6IBqVOTPyyLbhxeWwaA6VVUdgWrrZnqlB3H9HxdQaTsaczNRw7f8Lhtyog005QXd19uy'
-    ).then((stripe) => {
+    loadStripe(environment.stripePublishableKey).then((stripe) => {
       this.stripe = stripe;
 
       const elements = stripe?.elements();
@@ -86,25 +88,39 @@ export class CheckoutPaymentComponent implements OnInit {
     });
   }
 
-  submitOrder() {
+  async submitOrder() {
+    this.loading = true;
+
     const basket = this._cartService.getCurrentCartValue();
 
+    try {
+      const createdOrder = await this._createOrder(basket);
+
+      const paymentResult = await this.confirmPaymentWithStripe(basket);
+
+      if (paymentResult.paymentIntent?.status === 'succeeded') {
+        this._cartService.deleteLocalCart();
+
+        const navigationExtras: NavigationExtras = { state: createdOrder };
+
+        this._router.navigate(['checkout/success'], navigationExtras);
+      } else {
+        this._toastrService.error(paymentResult.error?.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+      this._toastrService.error(error?.message);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private async confirmPaymentWithStripe(basket: Cart | null) {
     if (!basket) {
-      return;
+      throw new Error('Cannot create order without basket');
     }
 
-    const orderToCreate = this._getOrderToCreate(basket);
-
-    if (!orderToCreate) {
-      return;
-    }
-
-    this._checkoutService.createOrder(orderToCreate).subscribe({
-      next: (order) => {
-        console.log(order);
-        this._toastrService.success('Order created successfully');
-
-        this.stripe
+    const result = await this.stripe
           ?.confirmCardPayment(basket.clientSecret!, {
             payment_method: {
               card: this.cardNumber!,
@@ -113,26 +129,26 @@ export class CheckoutPaymentComponent implements OnInit {
                   ?.value,
               },
             },
-          })
-          .then((result) => {
-            console.log(result);
-
-            if (result.paymentIntent?.status === 'succeeded') {
-              this._cartService.deleteLocalCart();
-
-              const navigationExtras: NavigationExtras = { state: order };
-
-              this._router.navigate(['checkout/success'], navigationExtras);
-            }
           });
-      },
-      error: (error) => {
-        this._toastrService.error(error);
-      },
-    });
+
+    if (!result) {
+      throw new Error("Problem attempting payment");
+    }
+
+    return result;
   }
 
-  private _getOrderToCreate(basket: Cart) {
+  private async _createOrder(basket: Cart | null) {
+    if (!basket) {
+      throw new Error('Cannot create order without basket');
+    }
+
+    const orderToCreate = this._getOrderToCreate(basket);
+
+    return firstValueFrom(this._checkoutService.createOrder(orderToCreate));
+  }
+
+  private _getOrderToCreate(basket: Cart): OrderToCreate {
     const deliveryMethod = this.checkoutForm
       ?.get('deliveryForm')
       ?.get('deliveryMethod')?.value;
@@ -140,7 +156,7 @@ export class CheckoutPaymentComponent implements OnInit {
 
     if (!deliveryMethod || !shipToAddress) {
       this._toastrService.error('Please select delivery method and address');
-      return;
+      throw new Error('Problem with basket');
     }
 
     return {

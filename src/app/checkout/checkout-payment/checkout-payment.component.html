@@ -30,7 +30,8 @@
   <button class="btn btn-outline-primary" cdkStepperPrevious>
     <i class="fa fa-angle-left"></i> Back to review
   </button>
-  <button class="btn btn-primary" (click)="submitOrder()" [disabled]="loading || checkoutForm.get('paymentForm')?.invalid">
+  {{ isPaymentFormValid }}
+  <button class="btn btn-primary" (click)="submitOrder()" [disabled]="loading || !isPaymentFormValid">
     {{ loading ? 'Submitting...' : 'Submit order' }} <i class="fa fa-angle-right"></i>
   </button>
 </div>

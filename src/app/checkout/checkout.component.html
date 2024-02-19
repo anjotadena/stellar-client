@@ -1,17 +1,17 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-8">
-      <sc-stepper [linearModeSelected]="false" #scStepper>
+      <sc-stepper #scStepper>
         <cdk-step [label]="'Address'" [completed]="checkoutForm.get('addressForm')?.valid">
           <sc-checkout-address [checkoutForm]="checkoutForm" />
         </cdk-step>
         <cdk-step [label]="'Delivery'" [completed]="checkoutForm.get('deliveryForm')?.valid">
           <sc-checkout-delivery [checkoutForm]="checkoutForm" />
         </cdk-step>
-        <cdk-step [label]="'Review'" [completed]="checkoutForm.get('reviewForm')?.valid">
+        <cdk-step [label]="'Review'">
           <sc-checkout-review [appStepper]="scStepper"/>
         </cdk-step>
-        <cdk-step [label]="'Payment'">
+        <cdk-step [label]="'Payment'" [completed]="checkoutForm.get('paymentForm')?.valid">
           <sc-checkout-payment [checkoutForm]="checkoutForm" />
         </cdk-step>
       </sc-stepper>

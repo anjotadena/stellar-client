@@ -3,7 +3,7 @@
     @for (step of steps; track $index) {
     <li class="nav-item">
       <div class="d-grid">
-        <button (click)="onClick($index)" class="nav-link py-3 text-uppercase fw-bold" [class.selected]="selected === step">
+        <button disabled (click)="onClick($index)" class="nav-link py-3 text-uppercase fw-bold" [class.selected]="selected === step">
           {{ step.label }}
         </button>
       </div>
